@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/current_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".AllRaidsTabFragment">
+
+    <Button
+        android:id="@+id/AddRaidButton"
+        android:layout_width="368dp"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/list"
+        android:layout_centerHorizontal="true"
+        android:onClick="addRaid"
+        android:text="Add Raid"
+        android:textSize="18sp" />
+
+    <ListView
+        android:id="@+id/list"
+        android:layout_width="374dp"
+        android:layout_height="393dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true" />
+</RelativeLayout>
