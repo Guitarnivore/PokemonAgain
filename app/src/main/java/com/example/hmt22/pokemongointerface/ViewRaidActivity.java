@@ -1,6 +1,8 @@
 package com.example.hmt22.pokemongointerface;
 
+import android.app.AlertDialog;
 import android.app.TimePickerDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -8,6 +10,7 @@ import android.text.InputType;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.RatingBar;
 import android.widget.TextView;
@@ -187,5 +190,70 @@ public class ViewRaidActivity extends AppCompatActivity {
 
     private void setNumMeetings(int i) {
         numMeetings = i;
+    }
+
+    public void updatePoke(View v) {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Title");
+
+        // Set up the input
+        final EditText input = new EditText(this);
+        // Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
+        input.setInputType(InputType.TYPE_CLASS_TEXT);
+        builder.setView(input);
+
+        // Set up the buttons
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                final String pokeName = input.getText().toString();
+
+                Thread t = new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            Socket socket = new Socket(MainActivity.host, MainActivity.port);
+                            Boolean b = socket.isConnected();
+
+                            //if statement for connection
+
+                            BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
+
+                            writer.write("UPDATE_POKEMON," + raidInfo[0] + "," + pokeName + "\n");
+                            writer.flush();
+                            writer.close();
+                            socket.close();
+
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    raidInfo[5] = pokeName;
+                                    Intent intent = new Intent(ViewRaidActivity.this, ViewRaidActivity.class);
+                                    intent.putExtra("RaidInfo", raidInfo);
+                                    startActivity(intent);
+                                    finish();
+                                }
+                            });
+                        }
+                        catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+                t.start();
+            }
+        });
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+
+        builder.show();
+
+
+
     }
 }

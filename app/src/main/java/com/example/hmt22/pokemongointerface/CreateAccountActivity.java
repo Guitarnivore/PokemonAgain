@@ -33,9 +33,9 @@ public class CreateAccountActivity extends AppCompatActivity {
     public void createAccount(View view){
         Log.d("boop", "Clicked");
 
-        TextView user = findViewById(R.id.username);
-        TextView pass = findViewById(R.id.password);
-        TextView dev = findViewById(R.id.numDevices);
+        final TextView user = findViewById(R.id.username);
+        final TextView pass = findViewById(R.id.password);
+        final TextView dev = findViewById(R.id.numDevices);
 
         final String u = user.getText().toString();
         final String p = pass.getText().toString();
@@ -92,6 +92,12 @@ public class CreateAccountActivity extends AppCompatActivity {
 
                                 AlertDialog alert11 = builder1.create();
                                 alert11.show();
+
+                                user.setText("");
+                                pass.setText("");
+                                dev.setText("");
+
+                                user.requestFocus();
                             }
                         }
                     });

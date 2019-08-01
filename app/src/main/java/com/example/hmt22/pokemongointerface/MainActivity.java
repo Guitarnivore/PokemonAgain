@@ -8,6 +8,7 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.os.Looper;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
@@ -16,11 +17,13 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.net.ConnectException;
 import java.net.Socket;
 
 
@@ -85,6 +88,21 @@ public class MainActivity extends AppCompatActivity {
                             }
                         }
                     });
+                }
+                catch (ConnectException ce) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Context context = getApplicationContext();
+                            CharSequence text = "Unable to connect to server!";
+                            int duration = Toast.LENGTH_LONG;
+
+                            Toast toast = Toast.makeText(context, text, duration);
+                            toast.show();
+                        }
+                    });
+
+
                 }
                 catch (Exception e) {
                     e.printStackTrace();
